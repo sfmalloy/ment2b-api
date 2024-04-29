@@ -2,6 +2,8 @@ from typing import List
 from pydantic import BaseModel
 from fastapi import FastAPI, Header
 
+app = FastAPI()
+
 class Item(BaseModel):
     uid: str
     first_name: str
