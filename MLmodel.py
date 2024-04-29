@@ -2,7 +2,7 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Load a pre-trained BERT model
-model = SentenceTransformer('bert-base-nli-mean-tokens')
+model = SentenceTransformer('multi-qa-mpnet-base-dot-v1')
 
 # User data
 users = [
@@ -15,7 +15,8 @@ users = [
     {"id": 7, "name": "Grace", "age": 24, "gender": "Female", "interests": ["Fashion Design", "Styling", "Beauty"]},
     {"id": 8, "name": "Henry", "age": 29, "gender": "Male", "interests": ["Gardening", "DIY", "Woodworking"]},
     {"id": 9, "name": "Ivy", "age": 27, "gender": "Female", "interests": ["Environmental Conservation", "Sustainability", "Renewable Energy"]},
-    {"id": 10, "name": "Jack", "age": 31, "gender": "Male", "interests": ["Film Making", "Screenwriting", "Directing"]}
+    {"id": 10, "name": "Jack", "age": 31, "gender": "Male", "interests": ["Film Making", "Screenwriting", "Directing"]},
+    {"id": 11, "name": "Allen", "age": 23, "gender": "Male", "interests": ["Machine Learning", "Data Science", "Python"]},
 ]
 
 # Get Alice's interests
