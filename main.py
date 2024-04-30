@@ -28,6 +28,10 @@ async def add_new_user(user_details:PostSchema):
     db.insert_new_user(user_details)
     db.insert_skills(user_details.skills)
 
+@app.put("/update")
+async def update_user_details(user_details:PostSchema):
+    db.update_user_details(user_details)
+    
 @app.get("/user")
 async def user_details(ment2b_session:str=Cookie(None)):
     if ment2b_session is None:
