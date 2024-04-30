@@ -24,24 +24,32 @@ users = [
     {"id": 11, "name": "Allen", "age": 23, "gender": "Male", "interests": ["Machine Learning", "Data Science", "Python"]},
 ]
 
-# Get Alice's interests
-alice_interests = " ".join(users[0]["interests"])
+def get_user_skills(uid: str) -> list:
+    #api call to get user from database
+    return " ".join(users[0]["interests"]) #tmp
 
-# Encode interests using BERT model
-user_embeddings = model.encode([user["interests"] for user in users])
+def model_encoder(uid: str, mentors: dict):
+    mentee_skills = get_user_skills("alice")
+    mentee_embeddings = model.encode(mentee_skills)
 
-# Encode Alice's interests
-alice_embedding = model.encode([alice_interests])[0]
+    #api call to get all mentors from database
+    mentor_embeddings = model.encode([mentor["interests"] for mentor in users])
 
-# Calculate cosine similarity between Alice's embedding and each user's embedding
-similarities = cosine_similarity([alice_embedding], user_embeddings)[0]
+    return mentee_embeddings, mentor_embeddings
 
-# Pair users with their similarity scores
-similar_users = list(zip([user["name"] for user in users[1:]], similarities[1:]))
+def ment2b(mentee_embeddings, mentor_embeddings, mentors: dict):
+    # Calculate cosine similarity between Alice's embedding and each user's embedding
+    similarities = cosine_similarity([mentee_embeddings], mentor_embeddings)[0]
 
-# Sort users by similarity score in descending order
-similar_users = sorted(similar_users, key=lambda x: x[1], reverse=True)
+    # Pair users with their similarity scores
+    similar_users = list(zip([user["name"] for user in users[1:]], similarities[1:]))
+    
+    # Sort users by similarity score in descending order
+    similar_users = sorted(similar_users, key=lambda x: x[1], reverse=True)[:3]
+    
+    print("Similar users to Alice based on interests:")
+    for user, similarity in similar_users:
+        print(f"{user}: {similarity}")
 
-print("Similar users to Alice based on interests:")
-for user, similarity in similar_users:
-    print(f"{user}: {similarity}")
+x, y = model_encoder("uid")
+ment2b(x, y)
