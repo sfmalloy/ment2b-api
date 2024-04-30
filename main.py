@@ -78,8 +78,6 @@ async def match_mentors(sessionToken:str=Header(None)):
     curr_user_data = db.get_user_details(session_token=sessionToken)
     potential_match_data = db.get_user_match_data(desired_grades=curr_user_data.desired_grades)
 
-    # print(curr_user_data.desired_skills) #append chatgpt extracted wants
-    # print(potential_match_data)
     ment2matches = ment2b(curr_user_data.desired_skills, potential_match_data)
 
     return ment2matches
