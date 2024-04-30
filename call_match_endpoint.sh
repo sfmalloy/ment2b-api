@@ -9,6 +9,8 @@ curl -s -X GET \
   --cookie-jar "$cookie_file" \
   http://localhost:8080/login > /dev/null
 
+cat $cookie_file
+
 # Parse the "ment2b_session" cookie value from the cookie file
 session_cookie=$(awk '/ment2b_session/{print $NF}' "$cookie_file")
 
