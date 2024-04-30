@@ -1,2 +1,5 @@
+uvicorn
+pydantic
+fastapi 
 sentence-transformers
 scikit-learn
