@@ -8,6 +8,6 @@ session_token=$(curl -s -X GET \
   http://localhost:8080/login | jq -r '.sessionToken')
 
 # Call localhost:8080/match with sessionToken
-curl -X POST \
-  -H "Authorization: Bearer $session_token" \
+curl -X GET \
+  -H "sessionToken: $session_token" \
   http://localhost:8080/match
