@@ -11,14 +11,6 @@ app = FastAPI()
 async def hello():
     return "hello"
 
-@app.post("/everything/")
-async def get_body(item:PostSchema, auth:str=Header(None)):
-    everything = {
-        "body":item,
-        "headers": auth
-    }
-    return everything
-
 @app.post("/signup")
 async def add_new_user(user_details:PostSchema):
     db.insert_new_user(user_details)
