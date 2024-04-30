@@ -51,6 +51,12 @@ async def login(uid:str=Header(None)):
         logger.info('Generating session')
         session_token = secrets.token_urlsafe(16)
         db.insert_session_token(uid=uid.strip().lower(), session_token=session_token)
+        logger.info('Grabbing user information')
+        db.get_user_details(session_token)
+
+    except HTTPException as e:
+        logger.error(e)
+        raise HTTPException(status_code=400, detail='User not found')
     except Exception as e:
         logger.error(e)
 
