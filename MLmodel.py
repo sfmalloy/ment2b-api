@@ -2,8 +2,11 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 from os import path
 
+
 # Load a pre-trained BERT model
 model_path =  path.abspath(path.join(path.dirname(__file__), "model"))
+# model = SentenceTransformer('multi-qa-MiniLM-L6-cos-v1')
+# model.save(model_path)
 model = SentenceTransformer(model_path)
 
 # User data
