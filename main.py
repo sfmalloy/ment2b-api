@@ -1,5 +1,5 @@
 import json
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Response, Cookie
 from fastapi.middleware.cors import CORSMiddleware
 from models import PostSchema
 
@@ -10,7 +10,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=['http://localhost:3000'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*']
@@ -26,10 +26,10 @@ async def add_new_user(user_details:PostSchema):
     db.insert_skills(user_details.skills)
 
 @app.get("/user")
-async def user_details(sessionToken:str=Header(None)):
-    if sessionToken is None:
+async def user_details(ment2b_session:str=Cookie(None)):
+    if ment2b_session is None:
         raise HTTPException(status_code=400, detail='session_token not found in request header')
-    return db.get_user_details(sessionToken).model_dump()
+    return db.get_user_details(ment2b_session).model_dump()
 
 @app.get("/login")
 async def login(uid:str=Header(None)):
@@ -40,7 +40,9 @@ async def login(uid:str=Header(None)):
     session_token = secrets.token_urlsafe(16)
     db.insert_session_token(uid=uid.strip().lower(), session_token=session_token)
     
-    return {'sessionToken': session_token}
+    res = Response(status_code=200, content='Successfully logged in')
+    res.set_cookie('ment2b_session', session_token)
+    return res
 
 @app.get("/skills")
 async def get_matching_skills(skillSubstring:str):
