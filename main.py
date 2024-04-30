@@ -21,7 +21,7 @@ async def get_body(item:PostSchema, auth:str=Header(None)):
 @app.post("/signup")
 async def add_new_user(user_details:PostSchema):
     db.insert_new_user(user_details)
-
+ 
 @app.get("/user")
 async def user_details(sessionToken:str=Header(None)):
     if sessionToken is None:
