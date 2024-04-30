@@ -1,3 +1,4 @@
+import json
 from fastapi import FastAPI, Header, HTTPException
 from models import PostSchema
 
@@ -21,7 +22,8 @@ async def get_body(item:PostSchema, auth:str=Header(None)):
 @app.post("/signup")
 async def add_new_user(user_details:PostSchema):
     db.insert_new_user(user_details)
- 
+    db.insert_skills(user_details.skills)
+
 @app.get("/user")
 async def user_details(sessionToken:str=Header(None)):
     if sessionToken is None:
@@ -39,3 +41,7 @@ async def login(uid:str=Header(None)):
     
     return {'sessionToken': session_token}
 
+@app.get("/skills")
+async def get_matching_skills(skillSubstring:str):
+    return db.match_skills(skillSubstring)
+    

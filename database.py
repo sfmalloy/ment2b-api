@@ -1,4 +1,5 @@
 import sqlite3
+from typing import List
 from models import PostSchema
 from fastapi import HTTPException
 
@@ -66,8 +67,12 @@ def insert_new_user(user_details:PostSchema):
                 user_dict.get('open_to_mentor'),
             )
         )
+        
         connection.commit()
         cursor.close()
+    except sqlite3.IntegrityError as e:
+        if e.sqlite_errorname == 'SQLITE_CONSTRAINT_PRIMARYKEY':
+            raise HTTPException(status_code=400, detail=f'User already exists')    
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
 
@@ -98,3 +103,31 @@ def get_user_details(session_token:str) -> PostSchema:
         raise HTTPException(status_code=400, detail='User not found')
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
+
+def insert_skills(skills:List[str]):
+    try:
+        cursor = connection.cursor()
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS Skills(
+                skill PRIMARY KEY 
+            )
+        ''')
+        for i in skills:
+            cursor.execute(f"INSERT INTO Skills (skill) VALUES ('{i}')")
+        connection.commit()
+        cursor.close()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
+
+def match_skills(skill_substring:str) -> List[str]:
+        cursor = connection.cursor()
+        matching_skills = []
+    
+        result = cursor.execute(f'''
+            SELECT skill from Skills WHERE skill LIKE '%{skill_substring}%'
+        ''')
+        for i in result.fetchall():
+            matching_skills.append(i[0])
+         
+        cursor.close()
+        return matching_skills
