@@ -53,17 +53,17 @@ def insert_new_user(user_details:PostSchema):
         cursor.execute(
             "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?)",
             (
-                user_dict.get('uid').strip().lower(),
-                user_dict.get('first_name').strip(),
-                user_dict.get('last_name').strip(),
-                user_dict.get('email').strip(),
-                user_dict.get('grade').strip(),
-                user_dict.get('position').strip(),
-                user_dict.get('sub_division').strip(),
-                ','.join(user_dict.get('skills')),
-                ','.join(user_dict.get('desired_skills')),
-                ','.join(user_dict.get('desired_grades')),
-                user_dict.get('open_to_mentor'),
+                user_dict.get('uid', "").strip().lower(),
+                user_dict.get('first_name', "").strip(),
+                user_dict.get('last_name', "").strip(),
+                user_dict.get('email', "").strip(),
+                user_dict.get('grade', "").strip(),
+                user_dict.get('position', "").strip(),
+                user_dict.get('sub_division', "").strip(),
+                ','.join(user_dict.get('skills', "")),
+                ','.join(user_dict.get('desired_skills', "")),
+                ','.join(user_dict.get('desired_grades', "")),
+                user_dict.get('open_to_mentor', ""),
             )
         )
         connection.commit()
