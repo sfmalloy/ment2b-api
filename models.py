@@ -1,20 +1,21 @@
 from pydantic import BaseModel 
-from typing import List
+from typing import List, Optional
 
 class PostSchema(BaseModel):
     uid: str
     first_name: str
     last_name: str
-    email: str
+    email: Optional[str]
     grade: str
     position: str
-    sub_division: str
+    sub_division: Optional[str]
 
     skills: List[str]
-    desired_skills: List[str]
-    desired_grades: List[str]
+    desired_skills: Optional[List[str]]
+    desired_grades: Optional[List[str]]
 
     open_to_mentor: bool
+    open_to_be_mentored: bool
 
 test_json = '''{
     "uid": "____",
@@ -37,5 +38,6 @@ test_json = '''{
         "B+",
         "A-"
     ],
-    "open_to_mentor": false
+    "open_to_mentor": false,
+    "open_to_be_mentored": false
 }'''
