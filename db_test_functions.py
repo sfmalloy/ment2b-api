@@ -23,12 +23,15 @@ def query(query):
 
 
 def drop_table(table_name):
-    cursor = connection.cursor()
-    cursor.execute(f'''
-        DROP TABLE {table_name}
-    ''')
-    connection.commit()
-    cursor.close()
+    try:
+        cursor = connection.cursor()
+        cursor.execute(f'''
+            DROP TABLE {table_name}
+        ''')
+        connection.commit()
+        cursor.close()
+    except: 
+        pass
 
 def drop_all_tables():
     drop_table(USERS_TABLE)
@@ -36,6 +39,32 @@ def drop_all_tables():
 
 
 def load_db_mock_data():
+
+    connection.execute('''
+            CREATE TABLE IF NOT EXISTS Skills(
+                skill UNIQUE
+            )
+    ''')
+        
+    connection.execute('''
+            CREATE TABLE IF NOT EXISTS Users(
+                uid string PRIMARY KEY,
+                first_name string,
+                last_name string,
+                email string, 
+                grade string, 
+                position string,
+                sub_division string, 
+                skills string,
+                desired_skills string,
+                desired_grades string,
+                open_to_mentor string,
+                open_to_be_mentored string
+            )
+    ''')
+    connection.commit()
+    
+
     # load in mock skills
     skills = [
         # Programming Languages
