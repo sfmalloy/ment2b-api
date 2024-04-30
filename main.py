@@ -1,4 +1,3 @@
-import json
 from fastapi import FastAPI, Header, HTTPException, Response, Cookie
 from fastapi.middleware.cors import CORSMiddleware
 from models import PostSchema

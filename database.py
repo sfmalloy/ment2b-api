@@ -70,7 +70,6 @@ def insert_new_user(user_details:PostSchema):
         ''')
         cursor.execute(
             "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 user_dict.get('uid', "").strip().lower(),
                 user_dict.get('first_name', "").strip(),
@@ -79,7 +78,6 @@ def insert_new_user(user_details:PostSchema):
                 user_dict.get('grade', "").strip(),
                 user_dict.get('position', "").strip(),
                 user_dict.get('sub_division', "").strip(),
-                user_dict.get('profile_description', "").strip(),
                 user_dict.get('profile_description', "").strip(),
                 ','.join(user_dict.get('skills', [])),
                 ','.join(user_dict.get('desired_skills', [])),
