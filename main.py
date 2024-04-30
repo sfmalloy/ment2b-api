@@ -54,6 +54,12 @@ async def login(uid:str=Header(None)):
     res.set_cookie('ment2b_session', session_token, max_age=1800, httponly=True, secure=True)
     return res
 
+@app.get("/logout")
+async def logout(ment2b_session:str=Cookie(None)):
+    db.delete_session_token(ment2b_session)
+    res = Response(status_code=200, content='Successfully logged out')
+    res.delete_cookie('ment2b_session')
+
 @app.get('/auth')
 async def check_cookie(ment2b_session:str=Cookie(None)):
     if not ment2b_session:
