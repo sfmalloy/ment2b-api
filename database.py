@@ -98,3 +98,22 @@ def get_user_details(session_token:str) -> PostSchema:
         raise HTTPException(status_code=400, detail='User not found')
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
+
+def update_user_details(user_details:PostSchema):
+    try:
+        user_dict = user_details.model_dump()
+        cursor = connection.cursor()
+        result = cursor.execute("SELECT * FROM Users")
+        print(result.fetchall())
+        cursor.execute(f'''
+            UPDATE Users
+            SET skills = ?, open_to_mentor = ?
+            WHERE uid = ?                   
+        ''', (','.join(user_dict.get('skills')), user_dict.get('open_to_mentor'), user_dict.get('uid').strip().lower()))
+        connection.commit()
+        print('User has been updated successfully!')
+        result = cursor.execute("SELECT * FROM Users")
+        print(result.fetchall())
+        cursor.close()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')

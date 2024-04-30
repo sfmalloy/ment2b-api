@@ -22,6 +22,10 @@ async def get_body(item:PostSchema, auth:str=Header(None)):
 async def add_new_user(user_details:PostSchema):
     db.insert_new_user(user_details)
 
+@app.put("/update")
+async def update_user_details(user_details:PostSchema):
+    db.update_user_details(user_details)
+    
 @app.get("/user")
 async def user_details(sessionToken:str=Header(None)):
     if sessionToken is None:
