@@ -53,7 +53,7 @@ def insert_new_user(user_details:PostSchema):
             )
         ''')
         cursor.execute(
-            "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 user_dict.get('uid', "").strip().lower(),
                 user_dict.get('first_name', "").strip(),
@@ -112,11 +112,15 @@ def insert_skills(skills:List[str]):
         cursor = connection.cursor()
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS Skills(
-                skill PRIMARY KEY 
+                skill UNIQUE
             )
         ''')
         for i in skills:
-            cursor.execute(f"INSERT INTO Skills (skill) VALUES ('{i}')")
+            try:
+                cursor.execute(f"INSERT INTO Skills (skill) VALUES ('{i}')")
+            except sqlite3.IntegrityError as e:
+                if e.sqlite_errorname != 'SQLITE_CONSTRAINT_UNIQUE':
+                    raise
         connection.commit()
         cursor.close()
     except Exception as e:
