@@ -45,6 +45,7 @@ def insert_new_user(user_details:PostSchema):
                 grade string, 
                 position string,
                 sub_division string, 
+                profile_description string     
                 skills string,
                 desired_skills string,
                 desired_grades string,
@@ -53,7 +54,7 @@ def insert_new_user(user_details:PostSchema):
             )
         ''')
         cursor.execute(
-            "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 user_dict.get('uid', "").strip().lower(),
                 user_dict.get('first_name', "").strip(),
@@ -62,6 +63,7 @@ def insert_new_user(user_details:PostSchema):
                 user_dict.get('grade', "").strip(),
                 user_dict.get('position', "").strip(),
                 user_dict.get('sub_division', "").strip(),
+                user_dict.get('profile_description', "").strip(),
                 ','.join(user_dict.get('skills', [])),
                 ','.join(user_dict.get('desired_skills', [])),
                 ','.join(user_dict.get('desired_grades', [])),
@@ -94,11 +96,12 @@ def get_user_details(session_token:str) -> PostSchema:
             grade=row[4],
             position=row[5],
             sub_division=row[6],
-            skills=row[7].split(','),
-            desired_skills=row[8].split(','),
-            desired_grades=row[9].split(','),
-            open_to_mentor=row[10],
-            open_to_be_mentored=row[11] 
+            profile_description=row[7],
+            skills=row[8].split(','),
+            desired_skills=row[9].split(','),
+            desired_grades=row[10].split(','),
+            open_to_mentor=row[11],
+            open_to_be_mentored=row[12] 
         )
         return user_details
 

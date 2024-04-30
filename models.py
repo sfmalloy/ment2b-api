@@ -9,6 +9,7 @@ class PostSchema(BaseModel):
     grade: str
     position: str
     sub_division: Optional[str]
+    profile_description: Optional[str]
 
     skills: List[str]
     desired_skills: Optional[List[str]]
@@ -25,6 +26,7 @@ test_json = '''{
     "grade": "A+",
     "position": "Developer",
     "sub_division": "BRO",
+    "profile_description": "Experienced fintech pro seeks mentorship to stay ahead. Ready to learn, grow, and lead in evolving landscape.",
     "skills": [
         "chillin",
         "click clackin on the keyboard",

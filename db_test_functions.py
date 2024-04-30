@@ -55,6 +55,7 @@ def load_db_mock_data():
                 grade string, 
                 position string,
                 sub_division string, 
+                profile_description string,
                 skills string,
                 desired_skills string,
                 desired_grades string,
@@ -106,6 +107,7 @@ def load_db_mock_data():
         "grade": "A+",
         "position": "Developer",
         "sub_division": "BRO",
+        "profile_description": "Experienced fintech pro seeks mentorship to stay ahead. Ready to learn, grow, and lead in evolving landscape.",
         "skills": [
             "chillin",
             "click clackin on the keyboard",
@@ -133,6 +135,7 @@ def load_db_mock_data():
         "grade": "B",
         "position": "Software Engineer",
         "sub_division": "CIO",
+        "profile_description": "Passionate fintech enthusiast seeking mentorship to navigate industry complexities. Committed to continuous learning and innovation.",
         "skills": [
             "coding",
             "problem-solving",
@@ -160,6 +163,7 @@ def load_db_mock_data():
         "grade": "A-",
         "position": "Data Scientist",
         "sub_division": "Analytics",
+        "profile_description": "Innovative fintech professional eager for mentorship in blockchain and AI applications. Dedicated to mastering technologies and driving industry disruption.",
         "skills": [
             "data analysis",
             "machine learning",
@@ -189,6 +193,7 @@ def load_db_mock_data():
         "grade": "B+",
         "position": "UX Designer",
         "sub_division": "Design",
+        "profile_description": "Driven fintech expert seeking mentorship in data analytics and cybersecurity. Committed to leveraging cutting-edge technologies for financial sector advancement.",
         "skills": [
             "UI design",
             "prototyping",
@@ -217,6 +222,7 @@ def load_db_mock_data():
             "grade": "A",
             "position": "Project Manager",
             "sub_division": "Management",
+            "profile_description": "Experienced fintech professional seeking mentorship in cloud computing and machine learning. Passionate about harnessing tech innovations for financial solutions.",
             "skills": [
                 "project planning",
                 "team leadership",
@@ -245,6 +251,7 @@ def load_db_mock_data():
         "grade": "B",
         "position": "Marketing Specialist",
         "sub_division": "Marketing",
+        "profile_description": "Seasoned fintech leader passionate about mentoring next-generation talent. Committed to sharing expertise in blockchain, AI, and cybersecurity for industry advancement.",
         "skills": [
             "social media marketing",
             "content creation",
@@ -274,6 +281,7 @@ def load_db_mock_data():
         "grade": "B+",
         "position": "Software Engineer",
         "sub_division": "Tech",
+        "profile_description": "Experienced fintech professional dedicated to mentoring aspiring talent in financial analytics and software development. Committed to fostering innovation and growth in the industry.",
         "skills": [
             "coding",
             "problem-solving",
@@ -303,6 +311,7 @@ def load_db_mock_data():
         "grade": "A-",
         "position": "Data Scientist",
         "sub_division": "Analytics",
+        "profile_description": "Passionate fintech expert eager to mentor emerging professionals in areas like cryptocurrency, fintech regulation, and digital banking. Committed to guiding the next generation of industry leaders.",
         "skills": [
             "data analysis",
             "machine learning",
@@ -331,6 +340,7 @@ def load_db_mock_data():
         "grade": "A",
         "position": "Machine Learning Engineer",
         "sub_division": "AI Research",
+        "profile_description": "",
         "skills": [
             "machine learning",
             "deep learning",
@@ -359,6 +369,7 @@ def load_db_mock_data():
         "grade": "A-",
         "position": "Data Engineer",
         "sub_division": "Data",
+        "profile_description": "Ambitious fintech enthusiast seeking mentorship to navigate the complexities of blockchain technology and algorithmic trading. Eager to learn from seasoned professionals and accelerate career growth in the industry.",
         "skills": [
             "data analysis",
             "SQL",
@@ -373,7 +384,7 @@ def load_db_mock_data():
             "B+"
         ],
         "open_to_mentor": true,
-        "open_to_be_mentored": false
+        "open_to_be_mentored": true
     }
 
     '''
@@ -388,6 +399,7 @@ def load_db_mock_data():
         "grade": "B+",
         "position": "UX Designer",
         "sub_division": "Design",
+        "profile_description": "Dynamic fintech professional seeking mentorship to deepen expertise in areas such as financial modeling, AI-driven investment strategies, and regulatory compliance. Dedicated to professional development and industry excellence.",
         "skills": [
             "user research",
             "prototyping",
@@ -401,8 +413,8 @@ def load_db_mock_data():
             "A",
             "B+"
         ],
-        "open_to_mentor": true,
-        "open_to_be_mentored": false
+        "open_to_mentor": false,
+        "open_to_be_mentored": true
     }
     '''
     db.insert_new_user(PostSchema.model_validate_json(test_json))
