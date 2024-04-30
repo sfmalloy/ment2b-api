@@ -2,3 +2,4 @@
 .venv
 venv 
 ment2b.db
+config.py
