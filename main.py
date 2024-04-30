@@ -35,7 +35,7 @@ async def update_user_details(user_details:PostSchema):
 @app.get("/user")
 async def user_details(ment2b_session:str=Cookie(None)):
     if ment2b_session is None:
-        raise HTTPException(status_code=400, detail='session_token not found in request header')
+        raise HTTPException(status_code=400, detail='session_token not found in cookie')
     return db.get_user_details(ment2b_session).model_dump()
 
 @app.get("/login")
@@ -78,7 +78,7 @@ async def get_matching_skills(skillSubstring:str):
 @app.get("/match")
 async def match_mentors(ment2b_session:str=Cookie(None)):
     if not ment2b_session:
-        raise HTTPException(status_code=400, detail='session_token not found in request header')
+        raise HTTPException(status_code=400, detail='session_token not found in cookie')
     
     # Get relevant details needed to match on 
     curr_user_data = db.get_user_details(session_token=ment2b_session)
