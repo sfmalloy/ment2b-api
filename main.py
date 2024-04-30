@@ -55,7 +55,7 @@ async def login(uid:str=Header(None)):
     return res
 
 @app.get('/auth')
-async def login(ment2b_session:str=Cookie(None)):
+async def check_cookie(ment2b_session:str=Cookie(None)):
     if not ment2b_session:
         return Response(status_code=401)
     return Response(status_code=200)
