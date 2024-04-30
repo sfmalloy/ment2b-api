@@ -1,9 +1,11 @@
 import sqlite3
+import logging
 from typing import List
 from models import PostSchema
 from fastapi import HTTPException
 
 connection = sqlite3.connect('ment2b.db')
+logger = logging.getLogger('uvicorn')
 
 def insert_session_token(uid:str, session_token:str):
     try:
@@ -19,6 +21,19 @@ def insert_session_token(uid:str, session_token:str):
         cursor.close()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
+
+def delete_session_token(session_token:str):
+    try:
+        cursor = connection.cursor()
+        cursor.execute(f'''
+            DELETE FROM Sessions
+            WHERE session_token = "{session_token}"
+        ''')
+        connection.commit()
+        cursor.close()
+    except:
+        logger.error('Could not find session token to delete')
+        pass
 
 def get_uid_from_session_token(session_token:str):
     try:
@@ -55,6 +70,7 @@ def insert_new_user(user_details:PostSchema):
         ''')
         cursor.execute(
             "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 user_dict.get('uid', "").strip().lower(),
                 user_dict.get('first_name', "").strip(),
@@ -63,6 +79,7 @@ def insert_new_user(user_details:PostSchema):
                 user_dict.get('grade', "").strip(),
                 user_dict.get('position', "").strip(),
                 user_dict.get('sub_division', "").strip(),
+                user_dict.get('profile_description', "").strip(),
                 user_dict.get('profile_description', "").strip(),
                 ','.join(user_dict.get('skills', [])),
                 ','.join(user_dict.get('desired_skills', [])),
@@ -79,7 +96,6 @@ def insert_new_user(user_details:PostSchema):
             raise HTTPException(status_code=400, detail=f'User already exists')    
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
-
 
 def get_user_details(session_token:str) -> PostSchema:
     uid = get_uid_from_session_token(session_token)

@@ -59,6 +59,13 @@ async def login(uid:str=Header(None)):
     res.set_cookie('ment2b_session', session_token, max_age=1800, httponly=True, secure=True)
     return res
 
+@app.get("/logout")
+async def logout(ment2b_session:str=Cookie(None)):
+    db.delete_session_token(ment2b_session)
+    res = Response(status_code=200, content='Successfully logged out')
+    res.delete_cookie('ment2b_session')
+    return res
+
 @app.get('/auth')
 async def check_cookie(ment2b_session:str=Cookie(None)):
     if not ment2b_session:
@@ -70,12 +77,12 @@ async def get_matching_skills(skillSubstring:str):
     return db.match_skills(skillSubstring)
     
 @app.get("/match")
-async def match_mentors(sessionToken:str=Header(None)):
-    if sessionToken is None:
+async def match_mentors(ment2b_session:str=Cookie(None)):
+    if not ment2b_session:
         raise HTTPException(status_code=400, detail='session_token not found in request header')
     
     # Get relevant details needed to match on 
-    curr_user_data = db.get_user_details(session_token=sessionToken)
+    curr_user_data = db.get_user_details(session_token=ment2b_session)
     potential_match_data = db.get_user_match_data(desired_grades=curr_user_data.desired_grades)
 
     ment2matches = ment2b(curr_user_data.desired_skills, potential_match_data)
