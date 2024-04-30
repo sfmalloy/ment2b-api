@@ -27,7 +27,7 @@ def get_uid_from_session_token(session_token:str):
         row = result.fetchone()
         cursor.close()
         return row[0]
-    except IndexError:
+    except TypeError:
         raise HTTPException(status_code=400, detail='Session Token not found')
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
@@ -98,11 +98,11 @@ def get_user_details(session_token:str) -> PostSchema:
             desired_skills=row[8].split(','),
             desired_grades=row[9].split(','),
             open_to_mentor=row[10],
-            open_to_mentor_be_mentored=row[10] 
+            open_to_be_mentored=row[11] 
         )
         return user_details
 
-    except IndexError:
+    except TypeError:
         raise HTTPException(status_code=400, detail='User not found')
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
@@ -138,3 +138,28 @@ def match_skills(skill_substring:str) -> List[str]:
          
         cursor.close()
         return matching_skills
+
+def get_user_match_data(desired_grades):
+    '''
+    Pulls back all mentors in desired grades
+    '''
+    cursor = connection.cursor()
+
+    potential_match_data = []
+
+    for grade in desired_grades:
+        result = cursor.execute(f'''
+            SELECT uid, desired_skills
+            FROM Users
+            WHERE open_to_mentor = 1
+            AND grade = "{grade}" 
+        ''')
+
+        for i in result.fetchall():
+            potential_match_data.append({
+                'uid': i[0],   
+                'skills': i[1].split(',')
+            })
+        
+    cursor.close()
+    return potential_match_data
