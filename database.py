@@ -27,7 +27,7 @@ def get_uid_from_session_token(session_token:str):
         row = result.fetchone()
         cursor.close()
         return row[0]
-    except IndexError:
+    except TypeError:
         raise HTTPException(status_code=400, detail='Session Token not found')
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
@@ -48,23 +48,25 @@ def insert_new_user(user_details:PostSchema):
                 skills string,
                 desired_skills string,
                 desired_grades string,
-                open_to_mentor string
+                open_to_mentor string,
+                open_to_be_mentored string
             )
         ''')
         cursor.execute(
-            "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            "INSERT INTO Users VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
             (
-                user_dict.get('uid').strip().lower(),
-                user_dict.get('first_name').strip(),
-                user_dict.get('last_name').strip(),
-                user_dict.get('email').strip(),
-                user_dict.get('grade').strip(),
-                user_dict.get('position').strip(),
-                user_dict.get('sub_division').strip(),
-                ','.join(user_dict.get('skills')),
-                ','.join(user_dict.get('desired_skills')),
-                ','.join(user_dict.get('desired_grades')),
+                user_dict.get('uid', "").strip().lower(),
+                user_dict.get('first_name', "").strip(),
+                user_dict.get('last_name', "").strip(),
+                user_dict.get('email', "").strip(),
+                user_dict.get('grade', "").strip(),
+                user_dict.get('position', "").strip(),
+                user_dict.get('sub_division', "").strip(),
+                ','.join(user_dict.get('skills', [])),
+                ','.join(user_dict.get('desired_skills', [])),
+                ','.join(user_dict.get('desired_grades', [])),
                 user_dict.get('open_to_mentor'),
+                user_dict.get('open_to_be_mentored'),
             )
         )
         
@@ -95,11 +97,12 @@ def get_user_details(session_token:str) -> PostSchema:
             skills=row[7].split(','),
             desired_skills=row[8].split(','),
             desired_grades=row[9].split(','),
-            open_to_mentor=row[10] 
+            open_to_mentor=row[10],
+            open_to_be_mentored=row[11] 
         )
         return user_details
 
-    except IndexError:
+    except TypeError:
         raise HTTPException(status_code=400, detail='User not found')
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
@@ -109,11 +112,15 @@ def insert_skills(skills:List[str]):
         cursor = connection.cursor()
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS Skills(
-                skill PRIMARY KEY 
+                skill UNIQUE
             )
         ''')
         for i in skills:
-            cursor.execute(f"INSERT INTO Skills (skill) VALUES ('{i}')")
+            try:
+                cursor.execute(f"INSERT INTO Skills (skill) VALUES ('{i}')")
+            except sqlite3.IntegrityError as e:
+                if e.sqlite_errorname != 'SQLITE_CONSTRAINT_UNIQUE':
+                    raise
         connection.commit()
         cursor.close()
     except Exception as e:
@@ -131,3 +138,28 @@ def match_skills(skill_substring:str) -> List[str]:
          
         cursor.close()
         return matching_skills
+
+def get_user_match_data(desired_grades):
+    '''
+    Pulls back all mentors in desired grades
+    '''
+    cursor = connection.cursor()
+
+    potential_match_data = []
+
+    for grade in desired_grades:
+        result = cursor.execute(f'''
+            SELECT uid, desired_skills
+            FROM Users
+            WHERE open_to_mentor = 1
+            AND grade = "{grade}" 
+        ''')
+
+        for i in result.fetchall():
+            potential_match_data.append({
+                'uid': i[0],   
+                'skills': i[1].split(',')
+            })
+        
+    cursor.close()
+    return potential_match_data

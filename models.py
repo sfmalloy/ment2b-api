@@ -15,6 +15,7 @@ class PostSchema(BaseModel):
     desired_grades: Optional[List[str]]
 
     open_to_mentor: bool
+    open_to_be_mentored: bool
 
 test_json = '''{
     "uid": "____",
@@ -37,5 +38,6 @@ test_json = '''{
         "B+",
         "A-"
     ],
-    "open_to_mentor": false
+    "open_to_mentor": false,
+    "open_to_be_mentored": false
 }'''
