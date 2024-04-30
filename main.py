@@ -3,7 +3,7 @@ from fastapi import FastAPI, Header, HTTPException, Response, Cookie
 from fastapi.middleware.cors import CORSMiddleware
 from models import PostSchema
 import logging
-from MLmodel import ment2b
+from ment2matcher import ment2b
 
 import secrets
 import database as db
@@ -78,14 +78,8 @@ async def match_mentors(sessionToken:str=Header(None)):
     curr_user_data = db.get_user_details(session_token=sessionToken)
     potential_match_data = db.get_user_match_data(desired_grades=curr_user_data.desired_grades)
 
-    print(curr_user_data.desired_skills)
-    print(potential_match_data)
-    ment2b(curr_user_data.desired_skills, potential_match_data)
-    # TODO send off to matching engine
-    # potential_match_data format:
-    # [
-    #    {'uid': 'dddd', 'skills': [...]}, 
-    #    {'uid': 'iiii', 'skills': [...]}
-    #  ]
+    # print(curr_user_data.desired_skills) #append chatgpt extracted wants
+    # print(potential_match_data)
+    ment2matches = ment2b(curr_user_data.desired_skills, potential_match_data)
 
-    return 'hey'
+    return ment2matches
