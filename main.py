@@ -92,3 +92,17 @@ async def match_mentors(ment2b_session:str=Cookie(None)):
     ment2matches = ment2b(curr_user_data, potential_match_data)
 
     return ment2matches
+
+@app.get("/questions")
+async def get_mentor_questions(ment2b_session:str=Cookie(None), mentorUid:str=Header(None)):
+    if not ment2b_session:
+        raise HTTPException(status_code=400, detail='session_token not found in cookie')
+    if not mentorUid:
+        raise HTTPException(status_code=400, detail='mentorUid not found in header')
+
+    curr_user_data = db.get_user_details(session_token=ment2b_session)
+    mentors_user_data = db.get_user_details(session_token=ment2b_session, uid=mentorUid)
+
+    return {
+        'questions': None
+    }

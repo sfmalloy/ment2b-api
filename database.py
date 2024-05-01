@@ -95,8 +95,9 @@ def insert_new_user(user_details:PostSchema):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'DB Exception occurred: {e}')
 
-def get_user_details(session_token:str) -> PostSchema:
-    uid = get_uid_from_session_token(session_token)
+def get_user_details(session_token:str, uid=None) -> PostSchema:
+    if uid is None:
+        uid = get_uid_from_session_token(session_token)
     try:
         cursor = connection.cursor()
         result = cursor.execute(f"SELECT * FROM Users WHERE uid='{uid}'")
