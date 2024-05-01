@@ -63,10 +63,7 @@ def suggest_mentorship_questions(mentor_description, mentee_description):
         "Questions for the mentee": questions[-3:]
     }
 
-    # Convert to JSON
-    json_data = json.dumps(questions_json)
-
-    return json_data
+    return questions_json
 
 if __name__ == '__main__':
     # Example profile description
