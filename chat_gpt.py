@@ -1,3 +1,4 @@
+import json
 import openai
 from config import OPENAI_API_KEY
 
@@ -55,8 +56,17 @@ def suggest_mentorship_questions(mentor_description, mentee_description):
 
     # Extract mentor and mentee questions
     generated_text = response.choices[0].text.strip()
+    questions = [line.lstrip("1234567890.- ") for line in generated_text.split("\n") if line[-1:] == "?"]
 
-    return generated_text
+    questions_json = {
+        "Questions for the mentor": questions[:3],
+        "Questions for the mentee": questions[-3:]
+    }
+
+    # Convert to JSON
+    json_data = json.dumps(questions_json)
+
+    return json_data
 
 if __name__ == '__main__':
     # Example profile description
@@ -69,11 +79,12 @@ if __name__ == '__main__':
     print("\nExtracted Wants:")
     print(wants)
 
+    # Extract relevant skills from the description
     skills = extract_skills_from_profile(mentor_profile_description)
     print("\nExtracted Skills:")
     print(skills)
 
-    # # Generate suggested questions
-    # questions_list = suggest_mentorship_questions(mentor_profile_description, mentee_profile_description)
-    # print("\nSuggested Questions:")
-    # print(questions_list)
+    # Generate suggested questions
+    questions_json = suggest_mentorship_questions(mentor_profile_description, mentee_profile_description)
+    print("\nSuggested Questions:")
+    print(questions_json)
