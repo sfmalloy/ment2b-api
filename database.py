@@ -186,7 +186,7 @@ def get_user_match_data(desired_grades):
 
     for grade in desired_grades:
         result = cursor.execute(f'''
-            SELECT uid, desired_skills
+            SELECT uid, desired_skills, profile_description
             FROM Users
             WHERE open_to_mentor = 1
             AND grade = "{grade}" 
@@ -195,7 +195,8 @@ def get_user_match_data(desired_grades):
         for i in result.fetchall():
             potential_match_data.append({
                 'uid': i[0],   
-                'skills': i[1].split(',')
+                'skills': i[1].split(','),
+                'profile_description': i[2]
             })
         
     cursor.close()
