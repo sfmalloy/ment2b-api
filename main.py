@@ -103,4 +103,4 @@ async def get_mentor_questions(ment2b_session:str=Cookie(None), mentorUid:str=He
     mentors_user_data = db.get_user_details(session_token=ment2b_session, uid=mentorUid).profile_description
     suggested_questions = suggest_mentorship_questions(curr_user_data, mentors_user_data)
 
-    return curr_user_data
+    return suggested_questions
