@@ -19,7 +19,7 @@ def model_encoder(mentee_desired_skills: str, mentors: dict):
     return mentee_embeddings, mentor_embeddings
 
 
-def ment2b(mentee: dict, mentors: dict):
+def ment2b(session_token, mentee: dict, mentors: dict):
     mentee_wants = extract_wants_from_profile(mentee.profile_description)
     
     mentee_desired_skills = mentee.desired_skills + mentee_wants
@@ -40,8 +40,5 @@ def ment2b(mentee: dict, mentors: dict):
     mentors = {mentor['uid']: mentor['profile_description'] for mentor in mentors}
 
     # user[0] = uid, user[1] = match % from model
-    for user in similar_users:
-        print(user[0])
-        # print(get_user_details(user[0]))
-    return [{user[0]:mentors.get(user[0])} for user in similar_users]
+    return [get_user_details(session_token, user[0]) for user in similar_users]
 

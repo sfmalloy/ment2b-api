@@ -12,10 +12,10 @@ session_cookie=$(echo "$login_response" | awk -F'set-cookie: ' 'NF > 1 {split($2
 #echo "session cookie"
 #echo $session_cookie
 
-Call localhost:8080/user with the "ment2b_session" cookie
-curl -s -X GET \
-  -H "Cookie: $session_cookie" \
-  http://localhost:8080/user
+# Call localhost:8080/user with the "ment2b_session" cookie
+# curl -s -X GET \
+#   -H "Cookie: $session_cookie" \
+#   http://localhost:8080/user
 
 # Call localhost:8080/match with the same "ment2b_session" cookie
 curl -s -X GET \

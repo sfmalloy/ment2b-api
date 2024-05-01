@@ -89,7 +89,7 @@ async def match_mentors(ment2b_session:str=Cookie(None)):
     # Get relevant details needed to match on 
     curr_user_data = db.get_user_details(session_token=ment2b_session)
     potential_match_data = db.get_user_match_data(desired_grades=curr_user_data.desired_grades)
-    ment2matches = ment2b(curr_user_data, potential_match_data)
+    ment2matches = ment2b(ment2b_session, curr_user_data, potential_match_data)
 
     return ment2matches
 
