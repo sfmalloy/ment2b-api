@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import PostSchema
 import logging
 from ment2matcher import ment2b
-
+from chat_gpt import suggest_mentorship_questions
 import secrets
 import database as db
 
@@ -90,7 +90,6 @@ async def match_mentors(ment2b_session:str=Cookie(None)):
     curr_user_data = db.get_user_details(session_token=ment2b_session)
     potential_match_data = db.get_user_match_data(desired_grades=curr_user_data.desired_grades)
     ment2matches = ment2b(ment2b_session, curr_user_data, potential_match_data)
-
     return ment2matches
 
 @app.get("/questions")
@@ -100,9 +99,8 @@ async def get_mentor_questions(ment2b_session:str=Cookie(None), mentorUid:str=He
     if not mentorUid:
         raise HTTPException(status_code=400, detail='mentorUid not found in header')
 
-    curr_user_data = db.get_user_details(session_token=ment2b_session)
-    mentors_user_data = db.get_user_details(session_token=ment2b_session, uid=mentorUid)
+    curr_user_data = db.get_user_details(session_token=ment2b_session).profile_description
+    mentors_user_data = db.get_user_details(session_token=ment2b_session, uid=mentorUid).profile_description
+    suggested_questions = suggest_mentorship_questions(curr_user_data, mentors_user_data)
 
-    return {
-        'questions': None
-    }
+    return curr_user_data
