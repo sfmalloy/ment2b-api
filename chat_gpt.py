@@ -22,6 +22,24 @@ def extract_wants_from_profile(description):
     
     return wants_text
 
+def extract_skills_from_profile(description):
+    # Define a prompt
+    prompt = f"Extract relevant skills from the description:\n{description}\nSkills:"
+
+    # Generate completions
+    response = openai.Completion.create(
+        engine="gpt-3.5-turbo-instruct",
+        prompt=prompt,
+        max_tokens=500,
+        temperature=0.5,
+        stop=None
+    )
+
+    response_text = response.choices[0].text.strip()
+    wants_text = [line.lstrip("1234567890.- ") for line in response_text.split("\n")]
+    
+    return wants_text
+
 def suggest_mentorship_questions(mentor_description, mentee_description):
     # Define a prompt
     prompt = f"Given their user descriptions, suggest 2 lists of 3 questions for the mentor and mentee to ask each other and get to know each other better.\nMentor Description:{mentor_description}\nMentee Description:{mentee_description}."
@@ -51,7 +69,11 @@ if __name__ == '__main__':
     print("\nExtracted Wants:")
     print(wants)
 
-    # Generate suggested questions
-    questions_list = suggest_mentorship_questions(mentor_profile_description, mentee_profile_description)
-    print("\nSuggested Questions:")
-    print(questions_list)
+    skills = extract_skills_from_profile(mentor_profile_description)
+    print("\nExtracted Skills:")
+    print(skills)
+
+    # # Generate suggested questions
+    # questions_list = suggest_mentorship_questions(mentor_profile_description, mentee_profile_description)
+    # print("\nSuggested Questions:")
+    # print(questions_list)

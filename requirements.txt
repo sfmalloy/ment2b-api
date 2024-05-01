@@ -3,3 +3,4 @@ pydantic
 fastapi 
 sentence-transformers
 scikit-learn
+openai==0.28
