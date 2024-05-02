@@ -156,7 +156,7 @@ def load_db_mock_data():
 
     test_json = '''
     {
-        "uid": "bbbb",
+        "uid": "jack",
         "first_name": "Jack",
         "last_name": "Sparrow",
         "email": "jack.sparrow@boats.com",
