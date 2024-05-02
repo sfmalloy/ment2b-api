@@ -156,6 +156,34 @@ def load_db_mock_data():
 
     test_json = '''
     {
+        "uid": "bbbb",
+        "first_name": "Jack",
+        "last_name": "Sparrow",
+        "email": "jack.sparrow@boats.com",
+        "grade": "technical_4",
+        "position": "Software Engineer",
+        "sub_division": "CIO",
+        "profile_description": "Leader in IT, enthusiastic about crew career growth. I have been mentoring developers for 5+ years. ",
+        "skills": [
+            "Leadership",
+            "problem-solving",
+            "team collaboration"
+        ],
+        "desired_skills": [
+            "machine learning",
+            "cloud computing"
+        ],
+        "desired_grades": [
+            "technical_5"
+        ],
+        "open_to_mentor": true,
+        "open_to_be_mentored": false
+    }'''
+    db.insert_new_user(PostSchema.model_validate_json(test_json))
+
+
+    test_json = '''
+    {
         "uid": "cccc",
         "first_name": "Emily",
         "last_name": "Nguyen",
